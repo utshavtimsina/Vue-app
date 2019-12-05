@@ -1,22 +1,71 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <div id="app" > 
+  <Header ></Header>
+  <hr>
+  <Todo v-bind:todos="todos" v-on:del-todo="deleteTodo"> </Todo>
+  <AddTodo v-on:add-todo="addTodo"></AddTodo>
+</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
+import Header from './components/Header.vue';
+import Todo from './components/Todo.vue';
+import AddTodo from './components/AddTodo.vue';
+import axios from 'axios';
+export default{
   name: 'app',
-  components: {
-    HelloWorld
+  components:{
+    Header,
+    Todo,
+    AddTodo,
+    
+  },
+  methods:{
+    deleteTodo(id){
+    //alert(id);
+    axios
+    .delete("https://jsonplaceholder.typicode.com/todos/"+id)
+    .then(res => {
+      alert(JSON.stringify(res.data));
+      this.todos = this.todos.filter(todo => todo.id != id)
+      });
+      
+    },
+    addTodo(todo){
+      
+      axios
+        .post("https://jsonplaceholder.typicode.com/todos",{
+           "title":""+todo,
+            "completed":false
+        })
+        .then(res =>{
+          this.todos.push(res.data);
+        })
+        .catch();
+      //this.todos.push(addTodo);
+    }
+  },
+  data(){
+   
+       return {
+        
+         todos:[]
+       }
+
+  },
+  created(){
+    axios
+        .get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+        .then(res =>this.todos = res.data)
+        .catch();
+        
   }
+   
+  
 }
 </script>
 
-<style>
+<style >
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,5 +73,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+Header{
+  padding: 20%;
+  margin: 10%;
 }
 </style>
