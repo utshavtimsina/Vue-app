@@ -26,7 +26,7 @@ export default{
     axios
     .delete("https://jsonplaceholder.typicode.com/todos/"+id)
     .then(res => {
-      alert(JSON.stringify(res.data));
+      //alert(JSON.stringify(res.data));
       this.todos = this.todos.filter(todo => todo.id != id)
       });
       
