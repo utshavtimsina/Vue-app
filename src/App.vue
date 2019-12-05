@@ -27,6 +27,7 @@ export default{
     .delete("https://jsonplaceholder.typicode.com/todos/"+id)
     .then(res => {
       //alert(JSON.stringify(res.data));
+      console.log(res);
       this.todos = this.todos.filter(todo => todo.id != id)
       });
       
